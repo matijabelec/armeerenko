@@ -8,6 +8,7 @@ use Armeerenko\BattleSimulation\Event\AttackWasSuccessful;
 use Armeerenko\BattleSimulation\Event\BattleWasEnded;
 use Armeerenko\BattleSimulation\Event\BattleWasStarted;
 use Armeerenko\BattleSimulation\Event\SoldiersWereKilledByExplosion;
+use Armeerenko\BattleSimulation\Exception\BattleIsAlreadyEnded;
 
 final class Battle
 {
@@ -29,6 +30,10 @@ final class Battle
 
     public function end(): void
     {
+        if ($this->isEnded()) {
+            throw new BattleIsAlreadyEnded();
+        }
+
         if ($this->army1Soldiers > $this->army2Soldiers) {
             $winnerArmyId = 1;
         } else {
@@ -40,6 +45,10 @@ final class Battle
 
     public function randomExplosion(): void
     {
+        if ($this->isEnded()) {
+            throw new BattleIsAlreadyEnded();
+        }
+
         $maxHits = min($this->army1Soldiers, $this->army2Soldiers);
 
         $hits1 = random_int(0, $maxHits);
@@ -57,6 +66,10 @@ final class Battle
 
     public function army1Attack(): void
     {
+        if ($this->isEnded()) {
+            throw new BattleIsAlreadyEnded();
+        }
+
         $attackingArmy = 1;
         $defendingArmy = 2;
 
@@ -72,6 +85,10 @@ final class Battle
 
     public function army2Attack(): void
     {
+        if ($this->isEnded()) {
+            throw new BattleIsAlreadyEnded();
+        }
+
         $attackingArmy = 2;
         $defendingArmy = 1;
 
