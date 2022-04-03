@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Armeerenko\BattleSimulation\Event;
 
+use LogicException;
+
 final class AttackWasSuccessful implements BattleEvent
 {
     private int $defenderArmyId;
@@ -11,7 +13,7 @@ final class AttackWasSuccessful implements BattleEvent
     public function __construct(int $defenderArmyId, int $hitsCount)
     {
         if (false === in_array($defenderArmyId, [1, 2])) {
-            throw new \LogicException('Only armies 1 and 2 are in battle.');
+            throw new LogicException('Only armies 1 and 2 are in battle.');
         }
 
         $this->defenderArmyId = $defenderArmyId;

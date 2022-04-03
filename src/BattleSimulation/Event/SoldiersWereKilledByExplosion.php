@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Armeerenko\BattleSimulation\Event;
 
+use LogicException;
+
 final class SoldiersWereKilledByExplosion implements BattleEvent
 {
     private int $armyId;
@@ -11,7 +13,7 @@ final class SoldiersWereKilledByExplosion implements BattleEvent
     public function __construct(int $armyId, int $count)
     {
         if (false === in_array($armyId, [1, 2])) {
-            throw new \LogicException('Only armies 1 and 2 are in battle.');
+            throw new LogicException('Only armies 1 and 2 are in battle.');
         }
 
         $this->armyId = $armyId;
