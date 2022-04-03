@@ -49,14 +49,12 @@ final class Battle
             throw new BattleIsAlreadyEnded();
         }
 
-        $maxHits = min($this->army1Soldiers, $this->army2Soldiers);
-
-        $hits1 = random_int(0, $maxHits);
+        $hits1 = random_int(0, $this->army1Soldiers);
         if ($hits1 > 0) {
             $this->recordThat(new SoldiersWereKilledByExplosion(1, $hits1));
         }
 
-        $hits2 = random_int(0, $maxHits);
+        $hits2 = random_int(0, $this->army2Soldiers);
         if ($hits2 > 0) {
             $this->recordThat(new SoldiersWereKilledByExplosion(2, $hits2));
         }
@@ -70,14 +68,12 @@ final class Battle
             throw new BattleIsAlreadyEnded();
         }
 
-        $attackingArmy = 1;
-        $defendingArmy = 2;
-
-        $hits = random_int(0, $this->army1Soldiers);
-        if ($hits < (int) ($this->army1Soldiers / 2.0)) {
-            $this->recordThat(new AttackWasFailed($attackingArmy, min($this->army1Soldiers, (int) ($hits / 2.0))));
+        if ($this->army1Soldiers < (int) ($this->army2Soldiers * 0.25)) {
+            $hits = min((int) ($this->army2Soldiers * 0.1), $this->army1Soldiers);
+            $this->recordThat(new AttackWasFailed(1, $hits));
         } else {
-            $this->recordThat(new AttackWasSuccessful($defendingArmy, min($this->army2Soldiers, $hits)));
+            $hits = min((int)($this->army1Soldiers * 0.25), $this->army2Soldiers);
+            $this->recordThat(new AttackWasSuccessful(2, $hits));
         }
 
         $this->checkEndingCondition();
@@ -89,14 +85,12 @@ final class Battle
             throw new BattleIsAlreadyEnded();
         }
 
-        $attackingArmy = 2;
-        $defendingArmy = 1;
-
-        $hits = random_int(0, $this->army2Soldiers);
-        if ($hits < (int) ($this->army2Soldiers / 2.0)) {
-            $this->recordThat(new AttackWasFailed($attackingArmy, min($this->army2Soldiers, (int) ($hits / 2.0))));
+        if ($this->army2Soldiers < (int) ($this->army1Soldiers * 0.25)) {
+            $hits = min((int) ($this->army1Soldiers * 0.1), $this->army2Soldiers);
+            $this->recordThat(new AttackWasFailed(1, $hits));
         } else {
-            $this->recordThat(new AttackWasSuccessful($defendingArmy, min($this->army1Soldiers, $hits)));
+            $hits = min((int)($this->army2Soldiers * 0.25), $this->army1Soldiers);
+            $this->recordThat(new AttackWasSuccessful(2, $hits));
         }
 
         $this->checkEndingCondition();
