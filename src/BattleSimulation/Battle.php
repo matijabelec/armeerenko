@@ -9,6 +9,8 @@ use Armeerenko\BattleSimulation\Event\BattleWasEnded;
 use Armeerenko\BattleSimulation\Event\BattleWasStarted;
 use Armeerenko\BattleSimulation\Event\SoldiersWereKilledByExplosion;
 use Armeerenko\BattleSimulation\Exception\BattleIsAlreadyEnded;
+use Armeerenko\BattleSimulation\Exception\TooManyHitsForArmySoldiers;
+use Armeerenko\BattleSimulation\Explosion\ExplosionImpact;
 
 final class Battle
 {
@@ -43,20 +45,24 @@ final class Battle
         $this->recordThat(new BattleWasEnded($winnerArmyId));
     }
 
-    public function randomExplosion(): void
+    public function randomExplosion(ExplosionImpact $explosionImpact): void
     {
         if ($this->isEnded()) {
             throw new BattleIsAlreadyEnded();
         }
 
-        $hits1 = random_int(0, $this->army1Soldiers);
-        if ($hits1 > 0) {
-            $this->recordThat(new SoldiersWereKilledByExplosion(1, $hits1));
+        $explosionResult = $explosionImpact->calculate($this->army1Soldiers, $this->army2Soldiers);
+
+        if ($explosionResult->hits1() > $this->army1Soldiers || $explosionResult->hits2() > $this->army2Soldiers) {
+            throw new TooManyHitsForArmySoldiers();
         }
 
-        $hits2 = random_int(0, $this->army2Soldiers);
-        if ($hits2 > 0) {
-            $this->recordThat(new SoldiersWereKilledByExplosion(2, $hits2));
+        if ($explosionResult->hasHits1()) {
+            $this->recordThat(new SoldiersWereKilledByExplosion(1, $explosionResult->hits1()));
+        }
+
+        if ($explosionResult->hasHits2()) {
+            $this->recordThat(new SoldiersWereKilledByExplosion(2, $explosionResult->hits2()));
         }
 
         $this->checkEndingCondition();
