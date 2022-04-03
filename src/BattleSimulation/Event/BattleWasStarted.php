@@ -5,7 +5,6 @@ namespace Armeerenko\BattleSimulation\Event;
 
 final class BattleWasStarted implements BattleEvent
 {
-
     private int $army1Soldiers;
     private int $army2Soldiers;
 
