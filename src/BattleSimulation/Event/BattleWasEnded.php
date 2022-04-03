@@ -22,4 +22,12 @@ final class BattleWasEnded implements BattleEvent
     {
         return $this->winnerArmyId;
     }
+
+    public function summary(): string
+    {
+        return sprintf(
+            'Battle was ended. Army %d won.',
+            $this->winnerArmyId
+        );
+    }
 }

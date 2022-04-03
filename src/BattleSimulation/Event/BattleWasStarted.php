@@ -23,4 +23,13 @@ final class BattleWasStarted implements BattleEvent
     {
         return $this->army2Soldiers;
     }
+
+    public function summary(): string
+    {
+        return sprintf(
+            'Battle started. Number of soldiers for army 1: %d. Number of soldiers for army 2: %d.',
+            $this->army1Soldiers,
+            $this->army2Soldiers
+        );
+    }
 }

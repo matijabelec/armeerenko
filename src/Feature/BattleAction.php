@@ -36,9 +36,8 @@ final class BattleAction implements Action
 
         $battle = $this->battleSimulator->simulate($army1, $army2);
 
-        $winner = (1 === $battle->winnerArmyId() ? 'army1' : 'army2');
-
-        $response->getBody()->write($winner);
+        $response->getBody()->write(sprintf('<p>Winner is <b>army %d</b>.</p>', $battle->winnerArmyId()));
+        $this->createEventsList($battle, $response);
 
         return $response;
     }
@@ -55,5 +54,16 @@ final class BattleAction implements Action
         }
 
         return $army;
+    }
+
+    private function createEventsList(Battle $battle, ResponseInterface $response): void
+    {
+        $events = $battle->pullEvents();
+
+        $response->getBody()->write('<ol>');
+        foreach ($events as $event) {
+            $response->getBody()->write(sprintf('<li>%s</li>', $event->summary()));
+        }
+        $response->getBody()->write('</ol>');
     }
 }

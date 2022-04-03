@@ -23,6 +23,9 @@ trait BattleEventsTrait
         }
     }
 
+    /**
+     * @return BattleEvent[]
+     */
     public function pullEvents(): array
     {
         $events = $this->events;
