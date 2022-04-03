@@ -1,0 +1,17 @@
+{
+    "name": "matijabelec/armeerenko",
+    "description": "The Battle of 2 Armies Simulator",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Armeerenko\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Matija Belec",
+            "email": "matija@belec.dev"
+        }
+    ],
+    "require": {}
+}
