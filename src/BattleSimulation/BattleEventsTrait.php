@@ -17,9 +17,29 @@ trait BattleEventsTrait
 
     protected function apply(BattleEvent $event): void
     {
-        $method = sprintf('apply%s', (new \ReflectionClass($event))->getName());
+        $method = sprintf('apply%s', (new \ReflectionClass($event))->getShortName());
         if (method_exists($this, $method)) {
             $this->$method($event);
         }
+    }
+
+    public function pullEvents(): array
+    {
+        $events = $this->events;
+
+        $this->events = [];
+
+        return $events;
+    }
+
+    public static function fromEvents(array $events): self
+    {
+        $self = new static();
+
+        foreach ($events as $event) {
+            $self->apply($event);
+        }
+
+        return $self;
     }
 }
