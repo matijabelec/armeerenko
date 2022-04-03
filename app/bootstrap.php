@@ -4,4 +4,9 @@ use Framework\App;
 
 require __DIR__ . '/../vendor/autoload.php';
 
-return new App();
+$app = new App();
+
+$router = $app->router();
+require __DIR__ . '/routes.php';
+
+return $app;
