@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Framework;
 
 use DI\Container;
+use DI\ContainerBuilder;
 use FastRoute\Dispatcher;
 use Fig\Http\Message\StatusCodeInterface;
 use Framework\Contract\Action;
@@ -21,9 +22,16 @@ final class App
     private Container $container;
     private RouteDispatcher $router;
 
-    public function __construct(?RouteDispatcher $router = null)
+    public function __construct(?RouteDispatcher $router = null, ?string $configPath = null)
     {
-        $this->container = new Container();
+        if (null !== $configPath) {
+            $builder = new ContainerBuilder();
+            $builder->addDefinitions($configPath);
+            $this->container = $builder->build();
+        } else {
+            $this->container = new Container();
+        }
+
         $this->router = $router ?? new FastRouteRouter();
     }
 
