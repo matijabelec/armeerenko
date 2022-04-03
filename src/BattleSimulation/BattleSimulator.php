@@ -3,12 +3,18 @@ declare(strict_types=1);
 
 namespace Armeerenko\BattleSimulation;
 
+use Armeerenko\BattleSimulation\Explosion\ExplosionImpact;
+
 final class BattleSimulator
 {
+    private ExplosionImpact $explosionImpact;
     private array $battleConfig;
 
-    public function __construct(array $battleConfig)
-    {
+    public function __construct(
+        ExplosionImpact $explosionImpact,
+        array $battleConfig
+    ) {
+        $this->explosionImpact = $explosionImpact;
         $this->battleConfig = $battleConfig;
     }
 
@@ -22,7 +28,7 @@ final class BattleSimulator
 
         foreach (range(1, 20) as $day) {
             if ($this->makeAttempt($explosionsRate)) {
-                $battle->randomExplosion();
+                $battle->randomExplosion($this->explosionImpact);
 
                 if ($battle->isEnded()) {
                     return $battle;
