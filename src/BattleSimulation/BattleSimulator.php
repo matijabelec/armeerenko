@@ -8,13 +8,16 @@ use Armeerenko\BattleSimulation\Explosion\ExplosionImpact;
 final class BattleSimulator
 {
     private ExplosionImpact $explosionImpact;
+    private SuccessfulAttemptSpecification $attemptWasMadeSuccessfullySpecification;
     private array $battleConfig;
 
     public function __construct(
         ExplosionImpact $explosionImpact,
+        SuccessfulAttemptSpecification $attemptWasMadeSuccessfullySpecification,
         array $battleConfig
     ) {
         $this->explosionImpact = $explosionImpact;
+        $this->attemptWasMadeSuccessfullySpecification = $attemptWasMadeSuccessfullySpecification;
         $this->battleConfig = $battleConfig;
     }
 
@@ -27,7 +30,7 @@ final class BattleSimulator
         $explosionsRate = $this->battleConfig['explosions']['rate'];
 
         foreach (range(1, 20) as $day) {
-            if ($this->makeAttempt($explosionsRate)) {
+            if ($this->attemptWasMadeSuccessfullySpecification->isSatisfiedBy($explosionsRate)) {
                 $battle->randomExplosion($this->explosionImpact);
 
                 if ($battle->isEnded()) {
@@ -35,7 +38,7 @@ final class BattleSimulator
                 }
             }
 
-            if ($this->makeAttempt($army1Attack)) {
+            if ($this->attemptWasMadeSuccessfullySpecification->isSatisfiedBy($army1Attack)) {
                 $battle->army1Attack();
 
                 if ($battle->isEnded()) {
@@ -43,7 +46,7 @@ final class BattleSimulator
                 }
             }
 
-            if ($this->makeAttempt($army2Attack)) {
+            if ($this->attemptWasMadeSuccessfullySpecification->isSatisfiedBy($army2Attack)) {
                 $battle->army2Attack();
 
                 if ($battle->isEnded()) {
@@ -55,12 +58,5 @@ final class BattleSimulator
         $battle->end();
 
         return $battle;
-    }
-
-    private function makeAttempt(float $maxValue): bool
-    {
-        $attempt = random_int(0, 100) / 100.0;
-
-        return $attempt < $maxValue;
     }
 }
