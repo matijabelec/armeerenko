@@ -29,4 +29,13 @@ final class SoldiersWereKilledByExplosion implements BattleEvent
     {
         return $this->count;
     }
+
+    public function summary(): string
+    {
+        return sprintf(
+            'Explosion happen. Soldiers from army %d was killed. Number of soldiers killed: %d.',
+            $this->armyId,
+            $this->count
+        );
+    }
 }

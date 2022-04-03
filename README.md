@@ -21,7 +21,8 @@ App is up and ready to be used at `http://localhost:8080`.
 
 Route definitions can be found inside of `app/routes.php`.
 
-There is `GET /battle` route with parameters `army1` and `army2` which is used as battle simulator.
+There is `GET /battle` route with parameters `army1` and `army2` which is used as battle simulator and it shows result
+of battle with list of events that occurred during battle.
 
 Other route `GET /` is just "homepage" with title of project.
 
@@ -30,7 +31,7 @@ Other route `GET /` is just "homepage" with title of project.
 Battle is simulated through `src/BattleSimulation/Battle.php` with all possible events that can happen on battle
 created as implementation of `src/BattleSimulation/Event/BattleEvent.php`.
 
-Battle is fully random through `\Armeerenko\BattleSimulation\BattleSimulator::simulate()` where three event may happen:
+Battle is fully random through `\Armeerenko\BattleSimulation\BattleSimulator::simulate()` where a few events may happen:
 1. Army1 attacks Army2 (attack can be successful or failed),
 2. Army2 attacks Army1 (attack can be successful or failed),
 3. Random explosion that can hurt one or both armies.

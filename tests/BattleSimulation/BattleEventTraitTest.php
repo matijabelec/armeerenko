@@ -36,6 +36,10 @@ final class BattleEventTraitTest extends UnitTestCase
 
 final class TestBattleEvent implements BattleEvent
 {
+    public function summary(): string
+    {
+        return 'Test event';
+    }
 }
 
 final class TestAggregate {

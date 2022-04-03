@@ -29,4 +29,13 @@ final class AttackWasSuccessful implements BattleEvent
     {
         return $this->hitsCount;
     }
+
+    public function summary(): string
+    {
+        return sprintf(
+            'Attack on army %d was successful. Soldiers killed in attack: %d.',
+            $this->defenderArmyId,
+            $this->hitsCount
+        );
+    }
 }
