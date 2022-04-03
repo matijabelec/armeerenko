@@ -93,10 +93,10 @@ final class Battle
 
         if ($this->army2Soldiers < (int) ($this->army1Soldiers * 0.25)) {
             $hits = min((int) ($this->army1Soldiers * 0.1), $this->army2Soldiers);
-            $this->recordThat(new AttackWasFailed(1, $hits));
+            $this->recordThat(new AttackWasFailed(2, $hits));
         } else {
             $hits = min((int)($this->army2Soldiers * 0.25), $this->army1Soldiers);
-            $this->recordThat(new AttackWasSuccessful(2, $hits));
+            $this->recordThat(new AttackWasSuccessful(1, $hits));
         }
 
         $this->checkEndingCondition();

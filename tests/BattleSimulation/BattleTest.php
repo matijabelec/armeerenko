@@ -137,4 +137,52 @@ final class BattleTest extends UnitTestCase
         $this->assertEquals(0, $battle->army1Soldiers());
         $this->assertEquals(990, $battle->army2Soldiers());
     }
+
+    public function testFailedAttackFromTooSmallArmy2ButNotEnded(): void
+    {
+        $army1Soldiers = 390;
+        $army2Soldiers = 90;
+
+        $battle = Battle::fromEvents([
+            new BattleWasStarted($army1Soldiers, $army2Soldiers),
+        ]);
+
+        $battle->army2Attack();
+
+        $events = $battle->pullEvents();
+        $this->assertCount(1, $events);
+        $this->assertInstanceOf(AttackWasFailed::class, $events[0]);
+        /** @var AttackWasFailed $attackWasFailed */
+        $attackWasFailed = $events[0];
+        $this->assertEquals(2, $attackWasFailed->attackerArmyId());
+        $this->assertEquals(39, $attackWasFailed->hitsCount());
+        $this->assertEquals(390, $battle->army1Soldiers());
+        $this->assertEquals(51, $battle->army2Soldiers());
+    }
+
+    public function testFailedAttackFromTooSmallArmy2AndBattleEnded(): void
+    {
+        $army1Soldiers = 990;
+        $army2Soldiers = 90;
+
+        $battle = Battle::fromEvents([
+            new BattleWasStarted($army1Soldiers, $army2Soldiers),
+        ]);
+
+        $battle->army2Attack();
+
+        $events = $battle->pullEvents();
+        $this->assertCount(2, $events);
+        $this->assertInstanceOf(AttackWasFailed::class, $events[0]);
+        $this->assertInstanceOf(BattleWasEnded::class, $events[1]);
+        /** @var AttackWasFailed $attackWasFailed */
+        $attackWasFailed = $events[0];
+        $this->assertEquals(2, $attackWasFailed->attackerArmyId());
+        $this->assertEquals(90, $attackWasFailed->hitsCount());
+        /** @var BattleWasEnded $battleWasEnded */
+        $battleWasEnded = $events[1];
+        $this->assertEquals(1, $battleWasEnded->winnerArmyId());
+        $this->assertEquals(990, $battle->army1Soldiers());
+        $this->assertEquals(0, $battle->army2Soldiers());
+    }
 }
