@@ -10,7 +10,8 @@
     ],
     "autoload": {
         "psr-4": {
-            "Armeerenko\\": "src/"
+            "Armeerenko\\": "src/",
+            "Framework\\": "framework/"
         }
     },
     "autoload-dev": {
