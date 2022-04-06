@@ -8,5 +8,5 @@ use Prophecy\PhpUnit\ProphecyTrait;
 
 abstract class UnitTestCase extends TestCase
 {
-
+    use ProphecyTrait;
 }
